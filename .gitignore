@@ -4,3 +4,4 @@ mlruns/*
 mlartifacts/*
 data/*
 *.db
+*.pyc
