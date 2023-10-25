@@ -1,5 +1,4 @@
 *.pem
-models/*
 mlruns/*
 mlartifacts/*
 data/*
