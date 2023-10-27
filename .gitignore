@@ -4,3 +4,4 @@ mlartifacts/*
 data/*
 *.db
 *.pyc
+*.env

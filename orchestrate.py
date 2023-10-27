@@ -17,6 +17,7 @@ import mlflow.pytorch
 
 # Prefect
 from prefect import flow, task
+from prefect_aws import S3Bucket
 
 from neural_networks import Net
 
@@ -218,15 +219,20 @@ def train_test_model(train_loader, valid_loader, test_loader):
         print('Test Loss: {:.6f}\n'.format(test_loss))
         mlflow.log_metric("avg_test_loss", test_loss)
 
+        accuracy_summary = "# test accuracy Report \n"
         for i in range(10):
             if class_total[i] > 0:
                 class_loss = 100 * class_correct[i] / class_total[i]
-                print('Test Accuracy of %5s: %2d%% (%2d/%2d)' % (
+                result = 'Test Accuracy of %5s: %2d%% (%2d/%2d)' % (
                     classes[i], class_loss,
-                    np.sum(class_correct[i]), np.sum(class_total[i])))
+                    np.sum(class_correct[i]), np.sum(class_total[i]))
+                print(result)
                 mlflow.log_metric(f"test_loss_{classes[i]}", class_loss)
             else:
-                print('Test Accuracy of %5s: N/A (no training examples)' % (classes[i]))
+                result = 'Test Accuracy of %5s: N/A (no training examples)' % (classes[i])
+                print(result)
+        
+
 
         test_accuracy = 100. * np.sum(class_correct) / np.sum(class_total)
         print('\nTest Accuracy (Overall): %2d%% (%2d/%2d)' % (
@@ -240,6 +246,10 @@ def main_flow() -> None:
     TRACKING_SERVER_HOST = "localhost"
     mlflow.set_tracking_uri(f"http://{TRACKING_SERVER_HOST}:5000")
     mlflow.set_experiment("cifar-experiments")
+
+     # Load
+    s3_bucket_block = S3Bucket.load("s3-bucket-block")
+    s3_bucket_block.download_folder_to_path(from_folder="data", to_folder="data")
 
     train_data, test_data = read_data()
 
