@@ -10,6 +10,9 @@ python = "^3.9"
 torch = { version = "1.12.1", source="torch"}
 torchaudio = { version = "0.12.1", source="torch"}
 torchvision = { version = "0.13.1", source="torch"}
+fastapi = "^0.111.0"
+pydantic-settings = "^2.2.1"
+structlog = "^24.2.0"
 
 [tool.poetry.group.dev.dependencies]
 ipykernel = "^6.29.4"
