@@ -1,0 +1,13 @@
+version: "3.8"
+
+services:
+  image_classification:
+    env_file:
+      - ../.prod.env
+    volumes:
+      - ../data:/home/workspace/data # API input / output are persisted on host storage
+
+networks:
+  default:
+    name: $NETWORK_NAME
+    external: true

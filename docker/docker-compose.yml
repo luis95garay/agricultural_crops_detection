@@ -1,0 +1,29 @@
+version: "3.8"
+services:
+  image_classification:
+    image: imagecl:latest
+    build:
+      context: ../
+      dockerfile: docker/Dockerfile.api
+    ports:
+      - "8000:8000"
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 0
+              capabilities: [gpu]
+  # mlflow:
+  #   image: ubuntu/mlflow:2.1.1_1.0-22.04
+  #   container_name: tracker_mlflow
+  #   restart: always
+  #   ports:
+  #     - "5000:5000"
+  #   entrypoint: mlflow server -h 0.0.0.0 --port 5000
+  #   depends_on:
+  #     - image_classification
+networks:
+  default:
+    name: $NETWORK_NAME
+    external: true

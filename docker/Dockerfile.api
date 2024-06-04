@@ -1,0 +1,43 @@
+# Use the official Python 3.6 image as the base image
+FROM nvidia/cuda:12.3.0-runtime-ubuntu20.04
+
+SHELL [ "/bin/bash", "--login", "-c" ]
+
+RUN apt-get update
+RUN apt-get install -y python3.9
+RUN apt-get install -y python3-pip
+
+# Install poetry
+RUN pip install poetry==1.7.1
+
+ENV POETRY_NO_INTERACTION=1 \
+    POETRY_VIRTUALENVS_IN_PROJECT=1 \
+    POETRY_VIRTUALENVS_CREATE=1 \
+    POETRY_CACHE_DIR=/tmp/poetry_cache
+
+# Set the working directory inside the container
+WORKDIR /app
+
+# Copy poetry files
+COPY pyproject.toml poetry.lock ./
+RUN touch README.md
+
+# Install any dependencies specified in the requirements file
+RUN poetry install --without dev --no-root && rm -rf $POETRY_CACHE_DIR
+
+# Copy rest of the project
+COPY api ./api
+COPY data ./data
+COPY lib ./lib
+COPY models ./models
+COPY api_config.py config.py entrypoint.sh logger.py main.py ./
+
+# Install any dependencies specified in the requirements file
+RUN poetry install
+
+# Expose the ports for each API (adjust the port numbers as needed)
+EXPOSE 8000
+
+# Command and entrypoinys
+RUN ["chmod", "+x", "./entrypoint.sh"]
+ENTRYPOINT ["bash", "./entrypoint.sh"]

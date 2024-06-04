@@ -1,0 +1,12 @@
+version: "3.8"
+
+services:
+  image_classification:
+    env_file:
+      - ../.dev.env
+    volumes: # mount all to avoid re-build the image when deveploing
+      - ../.:/home/workspace
+networks:
+  default:
+    name: $NETWORK_NAME
+    external: true
