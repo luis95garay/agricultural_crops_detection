@@ -1,3 +1,5 @@
+"""Module providing a FastAPI."""
+
 from fastapi import FastAPI
 # from api.exceptions import registry_exceptions
 from api.routes import route_registry

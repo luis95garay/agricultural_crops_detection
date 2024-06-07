@@ -11,11 +11,18 @@ from config import cnf
 class MLFlowPrediction(BasePrediction):
     def __init__(self):
         super().__init__()
-        mlflow.set_tracking_uri(f"http://{cnf.TRACKING_SERVER_HOST}:{cnf.PORT}")
+        mlflow.set_tracking_uri(
+            f"http://{cnf.TRACKING_SERVER_HOST}:{cnf.PORT}"
+        )
         mlflow.set_experiment(cnf.EXPERIMENT_NAME)
 
         client = mlflow.MlflowClient()
-        logged_model_mlf = [mv.source for idx, mv in enumerate(client.search_model_versions("name='prod.image_classification'")) if idx == 0][0]
+        logged_model_mlf = [
+            mv.source for idx, mv in
+            enumerate(client.search_model_versions(
+                "name='prod.image_classification'"
+            )) if idx == 0
+        ][0]
         self.logged_model_mlf = mlflow.pyfunc.load_model(logged_model_mlf)
 
     def predict(self, im: Image):

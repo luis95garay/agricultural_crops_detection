@@ -9,5 +9,3 @@ class BasePrediction(ABC):
     @abstractmethod
     def predict(self):
         pass
-
-

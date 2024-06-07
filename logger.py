@@ -18,7 +18,9 @@ def configure_logger():
             "formatters": {
                 "plain": {
                     "()": structlog.stdlib.ProcessorFormatter,
-                    "processor": structlog.processors.JSONRenderer(sort_keys=True),
+                    "processor": structlog.processors.JSONRenderer(
+                        sort_keys=True
+                    ),
                 },
                 "colored": {
                     "()": structlog.stdlib.ProcessorFormatter,
