@@ -42,3 +42,12 @@ stop:
 
 stop_dev:
 	$(DEV_COMPOSE_CMD) down --remove-orphans
+
+lint:
+	flake8 --ignore=E501,E402,F401 --exclude .venv
+
+scan_files:
+	bandit -r . -lll  --exclude .venv
+
+test:
+	pytest .
