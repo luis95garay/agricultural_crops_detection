@@ -43,11 +43,15 @@ stop:
 stop_dev:
 	$(DEV_COMPOSE_CMD) down --remove-orphans
 
+install:
+	pip install poetry==1.7.1 &&\
+ 	poetry install --only dev --no-root
+	
 lint:
-	flake8 --ignore=E501,E402,F401 --exclude .venv
+	poetry run python -m flake8 --ignore=E501,E402,F401 --exclude .venv
 
 scan_files:
-	bandit -r . -lll  --exclude .venv
+	poetry run python -m bandit -r . -lll  --exclude .venv
 
 test:
-	pytest .
+	poetry run python -m pytest .

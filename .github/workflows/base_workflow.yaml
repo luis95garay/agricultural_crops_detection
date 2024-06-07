@@ -1,0 +1,22 @@
+name: Basic checks on
+on:
+  push:
+    branches: ["*"]
+  pull_request:
+    branches: [main, develop, feature/*, bugfix/*]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v2
+      - name: Install dependencies
+        run: make install
+      - name: Lint with flake8
+        run: make lint
+      # - name: Test with pytest
+      #   run: make test
+      - name: Security scan with bandit
+        run: make scan_files
